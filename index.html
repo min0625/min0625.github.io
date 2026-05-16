@@ -1,15 +1,1194 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Redirecting to GitHub Profile</title>
-</head>
-<body>
-  <p>You will be redirected in a few seconds to <a href="https://github.com/min0625">https://github.com/min0625</a>.</p>
-  <script>
-    setTimeout(function () {
-      window.location.replace("https://github.com/min0625");
-    }, 1000);
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Huang — Backend Engineer</title>
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <meta
+      name="description"
+      content="Min Huang 黃彥閔 — Backend Engineer specializing in distributed systems, microservices, and cloud-native infrastructure."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Hanken+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    >
+    <style>
+    /* ── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --bg-pure: #000000;
+      --bg-elevated: #0a0a0a;
+      --bg-surface: #121414;
+      --bg-surface-low: #1a1c1c;
+      --bg-surface-high: #292a2a;
+      --text-primary: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --accent: #3b82f6;
+      --accent-dim: #1d4ed8;
+      --border: #1a1a1a;
+      --border-bright: #2a2a2a;
+      --font-mono: "JetBrains Mono", monospace;
+      --font-sans: "Hanken Grotesk", sans-serif;
+      --max-w: 1200px;
+      --margin-desktop: 64px;
+      --margin-mobile: 16px;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-pure);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ── Utilities ─────────────────────────────────────────── */
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    .container {
+      max-width: var(--max-w);
+      margin-inline: auto;
+      padding-inline: var(--margin-desktop);
+    }
+
+    .label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    /* ── Navigation ────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 60px;
+      background-color: var(--bg-pure);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-icon-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-icon-link {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      transition:
+        border-color 0.2s,
+        color 0.2s;
+    }
+
+    .nav-icon-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    #hero {
+      min-height: calc(100vh - 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at 50% 50%,
+        rgba(59, 130, 246, 0.05) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .hero-name {
+      font-family: var(--font-mono);
+      font-size: clamp(40px, 7vw, 80px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-family: var(--font-mono);
+      font-size: clamp(14px, 2vw, 18px);
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.3;
+    }
+
+    .hero-bio {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 36px;
+      border-left: 2px solid var(--accent);
+      padding: 8px 16px;
+      background-color: rgba(10, 10, 10, 0.5);
+      text-align: left;
+    }
+
+    .hero-social-links {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .hero-icon-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border-bright);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      transition:
+        border-color 0.2s,
+        color 0.2s;
+    }
+
+    .hero-icon-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-cta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 8px 16px;
+      transition: border-color 0.2s;
+    }
+
+    .hero-cta-link:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── Section Base ──────────────────────────────────────── */
+    section {
+      padding-block: 96px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header {
+      margin-bottom: 64px;
+    }
+
+    .section-number {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    /* ── About ─────────────────────────────────────────────── */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-left {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .about-body {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .about-body p + p {
+      margin-top: 20px;
+    }
+
+    .about-image-panel {
+      position: relative;
+    }
+
+    .about-image-panel::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      background: rgba(59, 130, 246, 0.08);
+      filter: blur(12px);
+      transition: background 0.5s;
+    }
+
+    .about-image-panel:hover::before {
+      background: rgba(59, 130, 246, 0.18);
+    }
+
+    .about-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(40%) opacity(0.65);
+      transition: filter 0.5s;
+      border: 1px solid var(--border-bright);
+    }
+
+    .about-image-panel:hover .about-img {
+      filter: grayscale(0%) opacity(1);
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background-color: var(--border);
+    }
+
+    .stat-item {
+      background-color: var(--bg-elevated);
+      padding: 28px;
+    }
+
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-value .accent {
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── Tech Stack ────────────────────────────────────────── */
+    #skills {
+      background-color: var(--bg-elevated);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background-color: var(--border);
+    }
+
+    .skill-group {
+      background-color: var(--bg-elevated);
+      padding: 36px;
+    }
+
+    .skill-group-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      padding: 5px 10px;
+      border: 1px solid var(--border-bright);
+      color: var(--text-muted);
+      background-color: transparent;
+      transition:
+        border-color 0.2s,
+        color 0.2s;
+    }
+
+    .tag:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+    }
+
+    /* ── Experience ────────────────────────────────────────── */
+    #experience .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background-color: var(--border);
+    }
+
+    .exp-item {
+      background-color: var(--bg-pure);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 48px;
+      transition: background-color 0.2s;
+    }
+
+    .exp-item:hover {
+      background-color: var(--bg-elevated);
+    }
+
+    .exp-meta {
+      padding-top: 2px;
+    }
+
+    .exp-period {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .exp-company {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .exp-type {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .exp-role {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .exp-desc {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .exp-bullets li {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .exp-bullets li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 12px;
+      top: 2px;
+    }
+
+    /* ── Contact ───────────────────────────────────────────── */
+    #contact {
+      border-bottom: none;
+      background-color: var(--bg-elevated);
+    }
+
+    .contact-center {
+      max-width: 720px;
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .contact-center .section-number {
+      margin-bottom: 16px;
+    }
+
+    .contact-heading {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .contact-sub {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .contact-email-link {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: clamp(14px, 2vw, 22px);
+      font-weight: 600;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 8px;
+      margin-bottom: 48px;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    .contact-email-link:hover {
+      color: var(--accent);
+    }
+
+    .contact-social-row {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .contact-social-link {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .contact-social-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    footer {
+      padding-block: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-socials a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .footer-socials a:hover {
+      color: var(--accent);
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .container {
+        padding-inline: var(--margin-mobile);
+      }
+
+      nav {
+        height: auto;
+        padding-block: 10px;
+      }
+
+      .nav-inner {
+        flex-wrap: wrap;
+        row-gap: 10px;
+      }
+
+      .nav-icon-links {
+        display: flex;
+        order: 2;
+      }
+
+      .nav-links {
+        display: flex;
+        order: 3;
+        width: 100%;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        padding-block: 6px;
+      }
+
+      #about .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-image-panel {
+        display: none;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .exp-item {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 28px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .contact-social-row {
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      section {
+        padding-block: 64px;
+      }
+
+      .about-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-social-links {
+        gap: 12px;
+      }
+    }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="container nav-inner">
+        <span class="nav-logo">Min<span>_</span>HUANG</span>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav-icon-links">
+          <a
+            class="nav-icon-link"
+            href="https://github.com/min0625"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub"
+            >&gt;_</a
+          >
+          <a
+            class="nav-icon-link"
+            href="https://www.linkedin.com/in/min0625/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="LinkedIn"
+            >LI</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="hero">
+      <div class="container">
+        <div class="hero-content">
+          <!-- <p class="hero-tag">// 00 _ INIT</p> -->
+          <h1 class="hero-name">
+            HELLO, I'M<br><span class="accent">MIN HUANG</span>
+          </h1>
+          <p class="hero-title">Senior Backend Engineer</p>
+          <p class="hero-bio">
+            Backend engineer with 6+ years of Go experience building scalable
+            microservices and distributed systems. Engineering for performance
+            and minimalist logic.
+          </p>
+          <div class="hero-social-links">
+            <a
+              class="hero-icon-link"
+              href="https://github.com/min0625"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub"
+              >&gt;_</a
+            >
+            <a
+              class="hero-icon-link"
+              href="https://www.linkedin.com/in/min0625/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="LinkedIn"
+              >LI</a
+            >
+            <a
+              class="hero-icon-link"
+              href="https://min0625.medium.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Medium"
+              >MED</a
+            >
+          </div>
+          <a class="hero-cta-link" href="#experience">VIEW_EXPERIENCE →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+      <div class="container">
+        <div class="section-header">
+          <!-- <span class="section-number">// 01 _ ABOUT_ME</span> -->
+          <h2 class="section-title">Engineering Excellence.</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-left">
+            <div class="about-body">
+              <p>
+                Backend engineer with 6+ years of Go experience building
+                scalable microservices and distributed systems. Skilled in
+                designing REST and gRPC APIs, event-driven architectures, and
+                cloud-native infrastructure.
+              </p>
+              <p>
+                Strong with MySQL, Redis, MongoDB, Kafka, and AWS / GCP;
+                experienced in payment system integrations. I approach software
+                through minimalist logic — code should be as efficient as it is
+                readable.
+              </p>
+            </div>
+            <div class="about-stats">
+              <div class="stat-item">
+                <div class="stat-value">6<span class="accent">+</span></div>
+                <div class="stat-label">Years of Go</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">60<span class="accent">K</span></div>
+                <div class="stat-label">Monthly Renewals Handled</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Cloud Platforms</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">4<span class="accent">+</span></div>
+                <div class="stat-label">Companies Served</div>
+              </div>
+            </div>
+          </div>
+          <div class="about-image-panel">
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0yAttr_mxC-fBdTQQP7_ugvft4Ys9fiSZhj4B7ovxNN-BYzAXo4JFPBVW31ilK2h8GBtnzivtM8wZr2a4tGwNgD4fGg0bYvyaUOyF1HSn85xZ_Gs3x57OOQhABwlDq1fF7qntK5SNBaSBoPHLBRJ7cPr14vVGCqQ9KZnE4VVP3aLc0JpTL6qOyV-VJA6LSRNHT4xW2NL0EVUtkS6KzMxeeYcLSbPcfm22Pz372_QlWKuxtxbRz5ghfUP0587FTOF3_1MHAYApMs8l"
+              alt="Developer workspace"
+              class="about-img"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills / Tech Stack -->
+    <section id="skills">
+      <div class="container">
+        <div class="section-header">
+          <!-- <span class="section-number">// 02 _ TECH_STACK</span> -->
+          <h2 class="section-title">Core Toolkit.</h2>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-group">
+            <div class="skill-group-title">Backend</div>
+            <div class="tag-list">
+              <span class="tag">Golang</span>
+              <span class="tag">RESTful API</span>
+              <span class="tag">gRPC</span>
+              <span class="tag">Temporal</span>
+              <span class="tag">Kafka</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">Database / Cache</div>
+            <div class="tag-list">
+              <span class="tag">MySQL (Aurora)</span>
+              <span class="tag">Redis</span>
+              <span class="tag">MongoDB</span>
+              <span class="tag">DynamoDB</span>
+              <span class="tag">Spanner</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">Cloud & Infra</div>
+            <div class="tag-list">
+              <span class="tag">AWS</span>
+              <span class="tag">GCP</span>
+              <span class="tag">Docker</span>
+              <span class="tag">Kubernetes</span>
+              <span class="tag">Terraform</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">AWS Services</div>
+            <div class="tag-list">
+              <span class="tag">EventBridge</span>
+              <span class="tag">SQS</span>
+              <span class="tag">Lambda</span>
+              <span class="tag">S3</span>
+              <span class="tag">ElastiCache</span>
+              <span class="tag">DocumentDB</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">GCP Services</div>
+            <div class="tag-list">
+              <span class="tag">PubSub</span>
+              <span class="tag">Spanner</span>
+              <span class="tag">SecretManager</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">CI / CD</div>
+            <div class="tag-list">
+              <span class="tag">GitHub Actions</span>
+              <span class="tag">GitLab CI</span>
+              <span class="tag">Datadog</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience">
+      <div class="container">
+        <div class="section-header">
+          <!-- <span class="section-number">// 03 _ EXPERIENCE</span> -->
+          <h2 class="section-title">Engineering History.</h2>
+        </div>
+        <div class="exp-list">
+          <!-- FliQt -->
+          <div class="exp-item">
+            <div class="exp-meta">
+              <div class="exp-period">Sep 2025 — Dec 2025</div>
+              <div class="exp-company">FliQt</div>
+              <div class="exp-type">Full-Time · Remote</div>
+            </div>
+            <div>
+              <div class="exp-role">Senior Backend Engineer</div>
+              <p class="exp-desc">
+                Designed and implemented core microservices on GCP for Web3
+                teams, delivering reliable, scalable backend systems.
+              </p>
+              <ul class="exp-bullets">
+                <li>
+                  Designed and implemented Web3 bridge service for cross-chain
+                  transactions.
+                </li>
+                <li>
+                  Integrated logging and tracing with Datadog to improve
+                  observability and debugging.
+                </li>
+                <li>
+                  Introduced trunk-based development to reduce merge conflicts
+                  and streamline release.
+                </li>
+                <li>
+                  Implemented GitHub Actions CI/CD pipelines to automate code
+                  formatting, linting, and testing.
+                </li>
+              </ul>
+              <div class="tag-list">
+                <span class="tag">Golang</span>
+                <span class="tag">GCP</span>
+                <span class="tag">PubSub</span>
+                <span class="tag">Spanner</span>
+                <span class="tag">Kubernetes</span>
+                <span class="tag">Terraform</span>
+                <span class="tag">GitHub Actions</span>
+                <span class="tag">Datadog</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KKCompany -->
+          <div class="exp-item">
+            <div class="exp-meta">
+              <div class="exp-period">Nov 2020 — Aug 2025</div>
+              <div class="exp-company">KKCompany</div>
+              <div class="exp-type">Full-Time · Taipei</div>
+            </div>
+            <div>
+              <div class="exp-role">Senior Backend Engineer</div>
+              <p class="exp-desc">
+                Designed and developed core microservices for Platform and
+                BlendVision on cloud infrastructure, delivering highly
+                available, scalable, and reliable systems.
+              </p>
+              <ul class="exp-bullets">
+                <li>
+                  Implemented Payment (GMO) service handling 60K+ monthly
+                  subscription renewals.
+                </li>
+                <li>
+                  Adopted event-driven architecture for improved service
+                  decoupling and scalability.
+                </li>
+                <li>
+                  Built reliable workflows using Temporal to enhance system
+                  stability.
+                </li>
+                <li>
+                  Created slow query dashboard for database performance
+                  monitoring and optimization.
+                </li>
+                <li>
+                  Integrated automated formatting, linting, and testing into
+                  GitLab CI pipelines.
+                </li>
+                <li>
+                  Introduced code generation tools to reduce repetitive
+                  development tasks.
+                </li>
+              </ul>
+              <div class="tag-list">
+                <span class="tag">Golang</span>
+                <span class="tag">gRPC</span>
+                <span class="tag">Temporal</span>
+                <span class="tag">MySQL Aurora</span>
+                <span class="tag">Redis</span>
+                <span class="tag">DynamoDB</span>
+                <span class="tag">MongoDB</span>
+                <span class="tag">AWS</span>
+                <span class="tag">Kubernetes</span>
+                <span class="tag">GitLab CI</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paradise Soft -->
+          <div class="exp-item">
+            <div class="exp-meta">
+              <div class="exp-period">Mar 2019 — May 2020</div>
+              <div class="exp-company">Paradise Soft</div>
+              <div class="exp-type">Full-Time · Taipei</div>
+            </div>
+            <div>
+              <div class="exp-role">Backend Engineer</div>
+              <p class="exp-desc">
+                Developed and maintained Data Warehouse services, including data
+                collection via web crawlers and third-party APIs, transformation
+                pipelines, and RESTful delivery.
+              </p>
+              <ul class="exp-bullets">
+                <li>
+                  Created internal libraries: API cache middleware and
+                  MySQL/MongoDB repositories.
+                </li>
+                <li>
+                  Refactored collection flow with Kafka to distribute tasks and
+                  reduce node load.
+                </li>
+                <li>
+                  Introduced proxy support to crawlers to reduce blocking risks.
+                </li>
+                <li>
+                  Optimized Info Site APIs using preprocessing and caching for
+                  low-latency responses.
+                </li>
+                <li>Built backend CRUD APIs for the DWH service.</li>
+              </ul>
+              <div class="tag-list">
+                <span class="tag">Golang</span>
+                <span class="tag">Kafka</span>
+                <span class="tag">MySQL</span>
+                <span class="tag">MongoDB</span>
+                <span class="tag">RESTful API</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Intern -->
+          <div class="exp-item">
+            <div class="exp-meta">
+              <div class="exp-period">Jul 2018 — Feb 2019</div>
+              <div class="exp-company">Paradise Soft</div>
+              <div class="exp-type">Internship · Taipei</div>
+            </div>
+            <div>
+              <div class="exp-role">Backend Engineer Intern</div>
+              <p class="exp-desc">
+                Assisted in developing Data Warehouse services, including data
+                collection, transformation, and RESTful API delivery.
+              </p>
+              <ul class="exp-bullets">
+                <li>
+                  Refactored the crawler project to reduce duplicated code and
+                  improve maintainability.
+                </li>
+                <li>Ingested web and API data into the DWH.</li>
+                <li>Built backend CRUD APIs for the DWH service.</li>
+              </ul>
+              <div class="tag-list">
+                <span class="tag">Golang</span>
+                <span class="tag">MySQL</span>
+                <span class="tag">MongoDB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="container">
+        <div class="contact-center">
+          <!-- <span class="section-number">// 04 _ ESTABLISH_CONNECTION</span> -->
+          <h2 class="contact-heading">Let's build something.</h2>
+          <p class="contact-sub">
+            Open to senior backend roles, distributed systems challenges, and
+            interesting engineering conversations.
+          </p>
+          <a class="contact-email-link" href="mailto:min.huang0625@gmail.com">
+            MIN.HUANG0625@GMAIL.COM
+          </a>
+          <div class="contact-social-row">
+            <a
+              class="contact-social-link"
+              href="https://github.com/min0625"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub</a
+            >
+            <a
+              class="contact-social-link"
+              href="https://www.linkedin.com/in/min0625/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >LinkedIn</a
+            >
+            <a
+              class="contact-social-link"
+              href="https://min0625.medium.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Medium</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container footer-inner">
+        <span class="footer-copy">
+          © 2026 MIN_HUANG. ENGINEERED FOR PERFORMANCE.
+        </span>
+        <div class="footer-socials">
+          <a
+            href="https://github.com/min0625"
+            target="_blank"
+            rel="noopener noreferrer"
+            >GitHub</a
+          >
+          <a
+            href="https://www.linkedin.com/in/min0625/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >LinkedIn</a
+          >
+          <a
+            href="https://min0625.medium.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Medium</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
