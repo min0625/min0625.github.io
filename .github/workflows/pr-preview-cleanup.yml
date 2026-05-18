@@ -10,6 +10,8 @@ jobs:
   cleanup:
     name: Delete Cloudflare Pages PR Preview
     runs-on: ubuntu-latest
+    # Only run for same-repo PRs — forks cannot access repository secrets
+    if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - name: Delete preview deployments for closed PR branch
         env:
@@ -18,9 +20,11 @@ jobs:
           CF_PROJECT: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
           BRANCH: ${{ github.head_ref }}
         run: |
+          # Phase 1: Collect all deployment IDs for this branch before deleting,
+          # so pagination isn't affected by records shifting after deletions.
+          ALL_IDS=()
           PAGE=1
-          PER_PAGE=25
-          DELETED=0
+          PER_PAGE=100
 
           while true; do
             RESPONSE=$(curl -s -X GET \
@@ -32,21 +36,13 @@ jobs:
               exit 1
             fi
 
-            IDS=$(echo "$RESPONSE" | jq -r \
+            BATCH=$(echo "$RESPONSE" | jq -r \
               --arg branch "$BRANCH" \
               '.result[] | select(.deployment_trigger.metadata.branch == $branch) | .id')
 
-            for ID in $IDS; do
-              DEL_RESPONSE=$(curl -s -X DELETE \
-                "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT}/deployments/${ID}?force=true" \
-                -H "Authorization: Bearer ${CF_API_TOKEN}")
-              if [ "$(echo "$DEL_RESPONSE" | jq -r '.success')" = "true" ]; then
-                echo "Deleted deployment: $ID"
-                DELETED=$((DELETED + 1))
-              else
-                echo "Failed to delete deployment $ID: $(echo "$DEL_RESPONSE" | jq -r '.errors')"
-              fi
-            done
+            while IFS= read -r ID; do
+              [ -n "$ID" ] && ALL_IDS+=("$ID")
+            done <<< "$BATCH"
 
             RESULT_COUNT=$(echo "$RESPONSE" | jq '.result | length')
             if [ "$RESULT_COUNT" -lt "$PER_PAGE" ]; then
@@ -55,4 +51,24 @@ jobs:
             PAGE=$((PAGE + 1))
           done
 
-          echo "Total deployments deleted: $DELETED"
+          echo "Found ${#ALL_IDS[@]} deployment(s) to delete for branch: $BRANCH"
+
+          # Phase 2: Delete all collected deployments.
+          DELETED=0
+          FAILED=0
+
+          for ID in "${ALL_IDS[@]}"; do
+            DEL_RESPONSE=$(curl -s -X DELETE \
+              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT}/deployments/${ID}?force=true" \
+              -H "Authorization: Bearer ${CF_API_TOKEN}")
+            if [ "$(echo "$DEL_RESPONSE" | jq -r '.success')" = "true" ]; then
+              echo "Deleted deployment: $ID"
+              DELETED=$((DELETED + 1))
+            else
+              echo "Failed to delete deployment $ID: $(echo "$DEL_RESPONSE" | jq -r '.errors')"
+              FAILED=$((FAILED + 1))
+            fi
+          done
+
+          echo "Total deleted: $DELETED, failed: $FAILED"
+          [ "$FAILED" -eq 0 ] || exit 1
