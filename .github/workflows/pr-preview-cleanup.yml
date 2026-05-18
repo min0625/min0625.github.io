@@ -1,74 +1,120 @@
-name: PR Preview Cleanup
-
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+  delete:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name to clean preview deployments for (optional for delete event)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  deployments: write
 
 jobs:
-  cleanup:
-    name: Delete Cloudflare Pages PR Preview
+  clean:
     runs-on: ubuntu-latest
-    # Only run for same-repo PRs — forks cannot access repository secrets
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    name: Clean up deployments
     steps:
-      - name: Delete preview deployments for closed PR branch
+      - name: Clean up Cloudflare Pages preview deployments
         env:
-          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CF_PROJECT: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
-          BRANCH: ${{ github.head_ref }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PROJECT_NAME: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF_TYPE: ${{ github.event.ref_type }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          MANUAL_BRANCH: ${{ github.event.inputs.branch }}
         run: |
-          # Phase 1: Collect all deployment IDs for this branch before deleting,
-          # so pagination isn't affected by records shifting after deletions.
-          ALL_IDS=()
-          PAGE=1
-          PER_PAGE=100
+          set -euo pipefail
 
-          while true; do
-            RESPONSE=$(curl -s -X GET \
-              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT}/deployments?page=${PAGE}&per_page=${PER_PAGE}" \
-              -H "Authorization: Bearer ${CF_API_TOKEN}")
-
-            if [ "$(echo "$RESPONSE" | jq -r '.success')" != "true" ]; then
-              echo "Failed to list deployments: $(echo "$RESPONSE" | jq -r '.errors')"
-              exit 1
+          if [ "${GITHUB_EVENT_NAME:-}" = "delete" ]; then
+            if [ "${GITHUB_REF_TYPE:-}" != "branch" ]; then
+              echo "Skipping clean up: delete event is not a branch delete (ref_type=${GITHUB_REF_TYPE:-})."
+              exit 0
             fi
+            branch_name="${GITHUB_REF_NAME:-}"
+          else
+            branch_name="${MANUAL_BRANCH:-}"
+          fi
 
-            BATCH=$(echo "$RESPONSE" | jq -r \
-              --arg branch "$BRANCH" \
-              '.result[] | select(.deployment_trigger.metadata.branch == $branch) | .id')
+          if [ -z "${branch_name:-}" ]; then
+            echo "Branch name is required for manual cleanup."
+            exit 1
+          fi
 
-            while IFS= read -r ID; do
-              [ -n "$ID" ] && ALL_IDS+=("$ID")
-            done <<< "$BATCH"
+          project_name="${CLOUDFLARE_PROJECT_NAME}"
+          environment_name="${project_name} (Preview)"
+          owner=${GITHUB_REPOSITORY%%/*}
+          repo=${GITHUB_REPOSITORY##*/}
+          encoded_env=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$environment_name")
+          encoded_branch=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$branch_name")
 
-            RESULT_COUNT=$(echo "$RESPONSE" | jq '.result | length')
-            if [ "$RESULT_COUNT" -lt "$PER_PAGE" ]; then
-              break
-            fi
-            PAGE=$((PAGE + 1))
-          done
+          echo "Cleaning Cloudflare Pages preview deployments for branch: $branch_name"
+          echo "Environment: $environment_name"
 
-          echo "Found ${#ALL_IDS[@]} deployment(s) to delete for branch: $BRANCH"
+          deployments_json=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$owner/$repo/deployments?environment=$encoded_env&ref=$encoded_branch")
 
-          # Phase 2: Delete all collected deployments.
-          DELETED=0
-          FAILED=0
+          mapfile -t deployment_ids < <(jq -r '.[].id // empty' <<<"$deployments_json")
+          if [ "${#deployment_ids[@]}" -eq 0 ]; then
+            echo "No GitHub deployments found for environment $environment_name."
+            exit 0
+          fi
 
-          for ID in "${ALL_IDS[@]}"; do
-            DEL_RESPONSE=$(curl -s -X DELETE \
-              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT}/deployments/${ID}?force=true" \
-              -H "Authorization: Bearer ${CF_API_TOKEN}")
-            if [ "$(echo "$DEL_RESPONSE" | jq -r '.success')" = "true" ]; then
-              echo "Deleted deployment: $ID"
-              DELETED=$((DELETED + 1))
-            else
-              echo "Failed to delete deployment $ID: $(echo "$DEL_RESPONSE" | jq -r '.errors')"
-              FAILED=$((FAILED + 1))
+          declare -A url_to_deploy_id=()
+          for deployment_id in "${deployment_ids[@]}"; do
+            status_json=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$owner/$repo/deployments/$deployment_id/statuses")
+            environment_url=$(jq -r '.[0].environment_url // empty' <<<"$status_json")
+            if [ -n "$environment_url" ]; then
+              url_to_deploy_id["$environment_url"]="$deployment_id"
             fi
           done
 
-          echo "Total deleted: $DELETED, failed: $FAILED"
-          [ "$FAILED" -eq 0 ] || exit 1
+          if [ "${#url_to_deploy_id[@]}" -eq 0 ]; then
+            echo "No preview deployment URLs found in GitHub deployment statuses."
+            exit 0
+          fi
+
+          cf_endpoint="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$project_name/deployments"
+          cf_response=$(curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            "$cf_endpoint?per-page=50")
+
+          if [ "$(jq -r '.success // false' <<<"$cf_response")" != "true" ]; then
+            echo "Cloudflare API error:"
+            jq -r '.errors // empty' <<<"$cf_response"
+            exit 1
+          fi
+
+          deleted=0
+          while IFS= read -r deployment; do
+            url=$(jq -r '.url' <<<"$deployment")
+            id=$(jq -r '.id' <<<"$deployment")
+            if printf '%s\n' "${!url_to_deploy_id[@]}" | grep -Fx -- "$url" >/dev/null; then
+              echo "Deleting Cloudflare Pages deployment $id for $url"
+              curl -sS -X DELETE -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+                -H "Content-Type: application/json" \
+                "$cf_endpoint/$id"
+
+              github_id="${url_to_deploy_id[$url]}"
+              echo "Marking GitHub deployment $github_id INACTIVE"
+              curl -sS -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                -H "Content-Type: application/json" \
+                -d '{"state":"inactive","environment_url":"","log_url":""}' \
+                "https://api.github.com/repos/$owner/$repo/deployments/$github_id/statuses"
+              deleted=$((deleted + 1))
+            fi
+          done < <(jq -c '.result[]' <<<"$cf_response")
+
+          if [ "$deleted" -eq 0 ]; then
+            echo "No matching Cloudflare preview deployments found to delete."
+          else
+            echo "Deleted $deleted Cloudflare preview deployment(s)."
+          fi
