@@ -8,7 +8,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from typing import NoReturn
+from typing import Any, NoReturn
 
 
 def fail(message: str) -> NoReturn:
@@ -51,7 +51,7 @@ def get_branch_name() -> str:
   fail(f'Unsupported event: {event_name}')
 
 
-def request_json(url: str, method: str, token: str) -> dict[str, object]:
+def request_json(url: str, method: str, token: str) -> dict[str, Any]:
   request = urllib.request.Request(
     url,
     headers={
@@ -100,9 +100,10 @@ def list_branch_deployment_ids(
       if not isinstance(deployment, dict):
         continue
 
-      metadata = deployment.get('deployment_trigger', {})
-      if isinstance(metadata, dict):
-        metadata = metadata.get('metadata', {})
+      trigger = deployment.get('deployment_trigger', {})
+      metadata: dict[str, Any] | Any = {}
+      if isinstance(trigger, dict):
+        metadata = trigger.get('metadata', {})
 
       if (
         isinstance(metadata, dict)
