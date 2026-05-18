@@ -1,74 +1,28 @@
-name: PR Preview Cleanup
+name: Cloudflare Pages Cleanup
 
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+  delete:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch name to clean up Cloudflare Pages deployments for
+        required: true
+        type: string
 
 jobs:
   cleanup:
-    name: Delete Cloudflare Pages PR Preview
+    name: Delete Cloudflare Pages deployments
     runs-on: ubuntu-latest
-    # Only run for same-repo PRs — forks cannot access repository secrets
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'workflow_dispatch' || github.event.ref_type == 'branch'
+    permissions:
+      contents: read
     steps:
-      - name: Delete preview deployments for closed PR branch
+      - uses: actions/checkout@v5
+
+      - name: Delete deployments for deleted or selected branch
         env:
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_PROJECT: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
-          BRANCH: ${{ github.head_ref }}
-        run: |
-          # Phase 1: Collect all deployment IDs for this branch before deleting,
-          # so pagination isn't affected by records shifting after deletions.
-          ALL_IDS=()
-          PAGE=1
-          PER_PAGE=100
-
-          while true; do
-            RESPONSE=$(curl -s -X GET \
-              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT}/deployments?page=${PAGE}&per_page=${PER_PAGE}" \
-              -H "Authorization: Bearer ${CF_API_TOKEN}")
-
-            if [ "$(echo "$RESPONSE" | jq -r '.success')" != "true" ]; then
-              echo "Failed to list deployments: $(echo "$RESPONSE" | jq -r '.errors')"
-              exit 1
-            fi
-
-            BATCH=$(echo "$RESPONSE" | jq -r \
-              --arg branch "$BRANCH" \
-              '.result[] | select(.deployment_trigger.metadata.branch == $branch) | .id')
-
-            while IFS= read -r ID; do
-              [ -n "$ID" ] && ALL_IDS+=("$ID")
-            done <<< "$BATCH"
-
-            RESULT_COUNT=$(echo "$RESPONSE" | jq '.result | length')
-            if [ "$RESULT_COUNT" -lt "$PER_PAGE" ]; then
-              break
-            fi
-            PAGE=$((PAGE + 1))
-          done
-
-          echo "Found ${#ALL_IDS[@]} deployment(s) to delete for branch: $BRANCH"
-
-          # Phase 2: Delete all collected deployments.
-          DELETED=0
-          FAILED=0
-
-          for ID in "${ALL_IDS[@]}"; do
-            DEL_RESPONSE=$(curl -s -X DELETE \
-              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT}/deployments/${ID}?force=true" \
-              -H "Authorization: Bearer ${CF_API_TOKEN}")
-            if [ "$(echo "$DEL_RESPONSE" | jq -r '.success')" = "true" ]; then
-              echo "Deleted deployment: $ID"
-              DELETED=$((DELETED + 1))
-            else
-              echo "Failed to delete deployment $ID: $(echo "$DEL_RESPONSE" | jq -r '.errors')"
-              FAILED=$((FAILED + 1))
-            fi
-          done
-
-          echo "Total deleted: $DELETED, failed: $FAILED"
-          [ "$FAILED" -eq 0 ] || exit 1
+          INPUT_BRANCH: ${{ inputs.branch }}
+        run: python3 .github/scripts/cloudflare_pages_cleanup.py
