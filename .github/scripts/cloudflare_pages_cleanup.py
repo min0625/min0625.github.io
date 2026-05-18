@@ -101,9 +101,7 @@ def list_branch_deployment_ids(
         continue
 
       trigger = deployment.get('deployment_trigger', {})
-      metadata: Any = {}
-      if isinstance(trigger, dict):
-        metadata = trigger.get('metadata', {})
+      metadata = trigger.get('metadata', {}) if isinstance(trigger, dict) else {}
 
       if (
         isinstance(metadata, dict)
