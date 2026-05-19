@@ -4,7 +4,7 @@
 
 - Username: min0625
 
-- Role: Senior Backend Engineer
+- Role: Backend Engineer
 
 - Email: min.huang0625@gmail.com
 
