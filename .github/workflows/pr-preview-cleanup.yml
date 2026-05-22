@@ -80,7 +80,7 @@ jobs:
           cf_endpoint="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$encoded_project_name/deployments"
           cf_response=$(curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
             -H "Content-Type: application/json" \
-            "$cf_endpoint?per_page=100")
+            "$cf_endpoint?page=1&per_page=50")
 
           if [ "$(jq -r '.success // false' <<<"$cf_response")" != "true" ]; then
             echo "Cloudflare API error:"
