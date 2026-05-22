@@ -15,6 +15,8 @@ For detailed background and work history, fetch https://www.cake.me/resumes/min0
 ```bash
 bun run check   # lint + format check (Biome)
 bun run fix     # auto-fix lint + format issues
+bun run build   # generate dist/ output for deployment
+bun run preview # run local preview server
 ```
 
 Run `bun run fix` after any HTML/CSS edit, then confirm `bun run check` passes with no errors.

@@ -16,9 +16,15 @@ bun run check
 
 # Auto-fix lint + format issues
 bun run fix
+
+# Build the site to dist/
+bun run build
+
+# Preview the built site locally
+bun run preview
 ```
 
-Open `index.html` directly in a browser — no dev server required.
+Open `index.html` directly in a browser, or use `bun run preview` for a local built preview.
 
 ## Project Structure
 
