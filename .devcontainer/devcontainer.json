@@ -7,14 +7,10 @@
   "features": {
     "ghcr.io/devcontainer-community/devcontainer-features/bun.sh:1": {}
   },
-  "postCreateCommand": "bash .devcontainer/postcreate.sh",
+  "postCreateCommand": "bash .devcontainer/post_create.sh",
   "customizations": {
     "vscode": {
-      "extensions": [
-        "biomejs.biome",
-        "oven.bun-vscode",
-        "ms-vscode.live-server"
-      ]
+      "extensions": ["biomejs.biome", "oven.bun-vscode"]
     }
   }
 }
