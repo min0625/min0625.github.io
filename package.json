@@ -3,7 +3,7 @@
     "fix": "biome check --write .",
     "check": "biome check .",
     "clean": "rm -rf dist",
-    "build:assets": "mkdir -p dist && cp index.html dist/ && cp favicon.ico og-image.png CNAME robots.txt sitemap.xml dist/ && bun ./scripts/inject-build-info.js dist/index.html",
+    "build:assets": "mkdir -p dist && cp index.html dist/ && cp -r public/* dist/ && bun ./scripts/inject-build-info.js dist/index.html",
     "build:pages": "echo \"No page build step configured yet\"",
     "build": "bun run clean && bun run build:assets && bun run build:pages",
     "preview": "bun run build && bun run serve dist -l 3000",
