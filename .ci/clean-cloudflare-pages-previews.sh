@@ -106,6 +106,28 @@ call_cf_endpoint() {
 		"${cf_endpoint}${query}"
 }
 
+print_cloudflare_projects() {
+	local projects_response
+	projects_response="$(curl -sS -H "Authorization: Bearer ${api_token}" \
+		-H "Content-Type: application/json" \
+		"https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects")"
+
+	if ! jq -e . > /dev/null <<< "${projects_response}"; then
+		echo "Failed to list Cloudflare Pages projects; response was invalid JSON:"
+		echo "${projects_response}"
+		return 1
+	fi
+
+	if ! jq -e '.success == true' > /dev/null <<< "${projects_response}"; then
+		echo "Failed to list Cloudflare Pages projects; API returned an error:"
+		jq -r '.errors // .message // empty' <<< "${projects_response}"
+		return 1
+	fi
+
+	echo "Available Cloudflare Pages projects for account ${account_id}:"
+	jq -r '.result // [] | "- name: \(.name // "") | id: \(.id // "")"' <<< "${projects_response}"
+}
+
 cf_response="$(call_cf_endpoint "?page=1&per_page=50")"
 if ! jq -e . > /dev/null <<< "${cf_response}"; then
 	echo "Cloudflare response was invalid JSON:"
@@ -126,11 +148,13 @@ if ! jq -e '.success == true' > /dev/null <<< "${cf_response}"; then
 		if ! jq -e '.success == true' > /dev/null <<< "${cf_response}"; then
 			echo "Cloudflare API error after retry:"
 			jq -r '.errors // empty' <<< "${cf_response}"
+			print_cloudflare_projects || true
 			exit 1
 		fi
 	else
 		echo "Cloudflare API error:"
 		jq -r '.errors // empty' <<< "${cf_response}"
+		print_cloudflare_projects || true
 		exit 1
 	fi
 fi
