@@ -118,14 +118,24 @@ print_cloudflare_projects() {
 		return 1
 	fi
 
-	if ! jq -e '.success == true' > /dev/null <<< "${projects_response}"; then
+	local response_type
+	response_type="$(jq -r 'type' <<< "${projects_response}")"
+
+	if [ "${response_type}" = "object" ]; then
+		if jq -e '.success == true' > /dev/null <<< "${projects_response}"; then
+			echo "Available Cloudflare Pages projects for account ${account_id}:"
+			jq -r '.result[]? | "- name: \(.name // "") | id: \(.id // "")"' <<< "${projects_response}"
+			return 0
+		fi
+
 		echo "Failed to list Cloudflare Pages projects; API returned an error:"
-		jq -r '.errors // .message // empty' <<< "${projects_response}"
+		jq -r '.errors[]?.message // .message // empty' <<< "${projects_response}"
 		return 1
 	fi
 
-	echo "Available Cloudflare Pages projects for account ${account_id}:"
-	jq -r '.result // [] | "- name: \(.name // "") | id: \(.id // "")"' <<< "${projects_response}"
+	echo "Failed to list Cloudflare Pages projects; unexpected response type ${response_type}:"
+	echo "${projects_response}"
+	return 1
 }
 
 cf_response="$(call_cf_endpoint "?page=1&per_page=50")"
@@ -136,7 +146,14 @@ if ! jq -e . > /dev/null <<< "${cf_response}"; then
 fi
 
 if ! jq -e '.success == true' > /dev/null <<< "${cf_response}"; then
-	err="$(jq -r 'if type == "object" then .errors[]?.message // .message // empty else empty end' <<< "${cf_response}" | tr '\n' ' ' | sed 's/  */ /g')"
+	err="$(jq -r '
+		if type == "object" then
+			(.errors[]?.message // .message // empty)
+		elif type == "array" then
+			(.[]?.message // .message // empty)
+		else
+			empty
+		end' <<< "${cf_response}" | tr '\n' ' ' | sed 's/  */ /g')"
 	if printf '%s' "${err}" | grep -qi 'invalid list options'; then
 		echo "Cloudflare list query failed with invalid list options; retrying without pagination parameters."
 		cf_response="$(call_cf_endpoint "")"
@@ -147,13 +164,17 @@ if ! jq -e '.success == true' > /dev/null <<< "${cf_response}"; then
 		fi
 		if ! jq -e '.success == true' > /dev/null <<< "${cf_response}"; then
 			echo "Cloudflare API error after retry:"
-			jq -r '.errors // empty' <<< "${cf_response}"
+			jq -r 'if type == "object" then .errors[]?.message // .message // empty
+		elif type == "array" then (.[]?.message // .message // empty)
+		else empty end' <<< "${cf_response}"
 			print_cloudflare_projects || true
 			exit 1
 		fi
 	else
 		echo "Cloudflare API error:"
-		jq -r '.errors // empty' <<< "${cf_response}"
+		jq -r 'if type == "object" then .errors[]?.message // .message // empty
+		elif type == "array" then (.[]?.message // .message // empty)
+		else empty end' <<< "${cf_response}"
 		print_cloudflare_projects || true
 		exit 1
 	fi
