@@ -6,8 +6,7 @@
     "build:assets": "mkdir -p dist && cp index.html dist/ && cp -r public/* dist/ && bun ./scripts/inject-build-info.js dist/index.html",
     "build:pages": "echo \"No page build step configured yet\"",
     "build": "bun run clean && bun run build:assets && bun run build:pages",
-    "preview": "bun run build && bun run serve dist -l 3000",
-    "postinstall": "bun run build"
+    "preview": "bun run build && bun run serve dist -l 3000"
   },
   "dependencies": {},
   "devDependencies": {
