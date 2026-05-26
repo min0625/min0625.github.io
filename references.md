@@ -4,15 +4,15 @@
 
 - Username: min0625
 
-- Role: Backend Engineer
-
 - Email: min.huang0625@gmail.com
 
 - Location: Taipei, Taiwan
 
+- Role: Backend Engineer
+
 - Cake Resume: https://www.cake.me/resumes/min0625
 
-- Website: https://min0625.github.io https://min0625.com
+- Website: https://min0625.com https://min0625.github.io
 
 - LinkedIn: https://www.linkedin.com/in/min0625
 
