@@ -2,6 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <script>
+      (() => {
+        var s = localStorage.getItem("theme");
+        if (s === "light" || (s === null && window.matchMedia("(prefers-color-scheme: light)").matches)) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Min Huang — Backend Engineer</title>
     <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -66,6 +74,23 @@
       --max-w: 1200px;
       --margin-desktop: 64px;
       --margin-mobile: 16px;
+      --bg-bio: rgba(10, 10, 10, 0.5);
+    }
+
+    /* ── Light Mode ────────────────────────────────────────── */
+    [data-theme="light"] {
+      --bg-pure: #ffffff;
+      --bg-elevated: #f5f5f4;
+      --bg-surface: #f0efed;
+      --bg-surface-low: #e8e7e5;
+      --bg-surface-high: #d4d4d2;
+      --text-primary: #0f0f0f;
+      --text-muted: #555555;
+      --accent: #2563eb;
+      --accent-dim: #1d4ed8;
+      --border: #e4e4e4;
+      --border-bright: #d0d0d0;
+      --bg-bio: rgba(235, 235, 235, 0.7);
     }
 
     /* ── Reset ─────────────────────────────────────────────── */
@@ -267,7 +292,7 @@
       margin-bottom: 36px;
       border-left: 2px solid var(--accent);
       padding: 8px 16px;
-      background-color: rgba(10, 10, 10, 0.5);
+      background-color: var(--bg-bio);
       text-align: left;
     }
 
@@ -773,6 +798,30 @@
         gap: 12px;
       }
     }
+
+    /* ── Theme Toggle ──────────────────────────────────────── */
+    .theme-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition:
+        border-color 0.2s,
+        color 0.2s;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
     </style>
     <script type="application/ld+json">
       {
@@ -809,6 +858,13 @@
           <li><a href="#contact">Contact</a></li>
         </ul>
         <div class="nav-icon-links">
+          <button
+            id="theme-btn"
+            type="button"
+            class="theme-btn"
+            aria-label="Toggle light/dark mode"
+            title="Toggle light/dark mode"
+          ></button>
           <a
             class="nav-icon-link"
             href="https://github.com/min0625"
@@ -1282,5 +1338,37 @@
         </div>
       </div>
     </footer>
+    <script>
+      (() => {
+        var btn = document.getElementById("theme-btn");
+        var metaTheme = document.querySelector('meta[name="theme-color"]');
+
+        function isLight() {
+          return document.documentElement.getAttribute("data-theme") === "light";
+        }
+
+        function applyTheme(light) {
+          if (light) {
+            document.documentElement.setAttribute("data-theme", "light");
+          } else {
+            document.documentElement.removeAttribute("data-theme");
+          }
+          if (metaTheme) {
+            metaTheme.setAttribute("content", light ? "#ffffff" : "#000000");
+          }
+          btn.textContent = light ? "◑" : "☀";
+          btn.setAttribute("title", light ? "Switch to dark mode" : "Switch to light mode");
+          btn.setAttribute("aria-label", light ? "Switch to dark mode" : "Switch to light mode");
+        }
+
+        btn.addEventListener("click", () => {
+          var light = !isLight();
+          localStorage.setItem("theme", light ? "light" : "dark");
+          applyTheme(light);
+        });
+
+        applyTheme(isLight());
+      })();
+    </script>
   </body>
 </html>
