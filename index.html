@@ -31,7 +31,8 @@
     <meta property="og:locale" content="en_US">
     <meta property="og:image" content="https://min0625.com/og-image.png">
     <meta property="og:image:alt" content="Min Huang — Backend Engineer portfolio preview">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Min Huang — Backend Engineer">
@@ -50,22 +51,41 @@
     <style>
     /* ── Design Tokens ─────────────────────────────────────── */
     :root {
-      --bg-pure: #000000;
-      --bg-elevated: #0a0a0a;
-      --bg-surface: #121414;
-      --bg-surface-low: #1a1c1c;
-      --bg-surface-high: #292a2a;
-      --text-primary: #f0f0f0;
-      --text-muted: #a0a0a0;
-      --accent: #3b82f6;
+      --bg-pure: #ffffff;
+      --bg-elevated: #f5f5f4;
+      --bg-surface: #f0efed;
+      --bg-surface-low: #e8e7e5;
+      --bg-surface-high: #d4d4d2;
+      --text-primary: #0f0f0f;
+      --text-muted: #555555;
+      --accent: #2563eb;
       --accent-dim: #1d4ed8;
-      --border: #1a1a1a;
-      --border-bright: #2a2a2a;
+      --border: #e4e4e4;
+      --border-bright: #d0d0d0;
       --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --font-sans: "Hanken Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --max-w: 1200px;
       --margin-desktop: 64px;
       --margin-mobile: 16px;
+      --bg-bio: rgba(235, 235, 235, 0.7);
+    }
+
+    /* ── Dark Mode ─────────────────────────────────────────── */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-pure: #000000;
+        --bg-elevated: #0a0a0a;
+        --bg-surface: #121414;
+        --bg-surface-low: #1a1c1c;
+        --bg-surface-high: #292a2a;
+        --text-primary: #f0f0f0;
+        --text-muted: #a0a0a0;
+        --accent: #3b82f6;
+        --accent-dim: #1d4ed8;
+        --border: #1a1a1a;
+        --border-bright: #2a2a2a;
+        --bg-bio: rgba(10, 10, 10, 0.5);
+      }
     }
 
     /* ── Reset ─────────────────────────────────────────────── */
@@ -267,7 +287,7 @@
       margin-bottom: 36px;
       border-left: 2px solid var(--accent);
       padding: 8px 16px;
-      background-color: rgba(10, 10, 10, 0.5);
+      background-color: var(--bg-bio);
       text-align: left;
     }
 
