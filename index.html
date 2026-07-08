@@ -77,8 +77,10 @@
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-behavior: smooth;
+      }
     }
 
     body {
@@ -97,23 +99,10 @@
     }
 
     /* ── Utilities ─────────────────────────────────────────── */
-    .mono {
-      font-family: var(--font-mono);
-    }
-
     .container {
       max-width: var(--max-w);
       margin-inline: auto;
       padding-inline: var(--margin-desktop);
-    }
-
-    .label {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
     }
 
     .accent {
@@ -228,16 +217,6 @@
       text-align: center;
     }
 
-    .hero-tag {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 24px;
-    }
-
     .hero-name {
       font-family: var(--font-mono);
       font-size: clamp(40px, 7vw, 80px);
@@ -321,21 +300,11 @@
     section {
       padding-block: 96px;
       border-bottom: 1px solid var(--border);
+      scroll-margin-top: 60px;
     }
 
     .section-header {
       margin-bottom: 64px;
-    }
-
-    .section-number {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-      display: block;
     }
 
     .section-title {
@@ -597,10 +566,6 @@
       text-align: center;
     }
 
-    .contact-center .section-number {
-      margin-bottom: 16px;
-    }
-
     .contact-heading {
       font-family: var(--font-mono);
       font-size: clamp(32px, 5vw, 64px);
@@ -730,6 +695,11 @@
         padding-block: 6px;
       }
 
+      /* ponytail: rough wrapped-nav height; tune if nav layout changes */
+      section {
+        scroll-margin-top: 110px;
+      }
+
       #about .about-grid {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -844,7 +814,6 @@
     <section id="hero">
       <div class="container">
         <div class="hero-content">
-          <!-- <p class="hero-tag">// 00 _ INIT</p> -->
           <h1 class="hero-name">
             HELLO, I'M<br><span class="accent">MIN HUANG</span>
           </h1>
@@ -901,7 +870,6 @@
     <section id="about">
       <div class="container">
         <div class="section-header">
-          <!-- <span class="section-number">// 01 _ ABOUT_ME</span> -->
           <h2 class="section-title">About</h2>
         </div>
         <div class="about-grid">
@@ -941,7 +909,7 @@
           <div class="about-image-panel">
             <img
               src="/og-image.png"
-              alt="Developer workspace"
+              alt=""
               loading="lazy"
               decoding="async"
               class="about-img"
@@ -955,7 +923,6 @@
     <section id="skills">
       <div class="container">
         <div class="section-header">
-          <!-- <span class="section-number">// 02 _ TECH_STACK</span> -->
           <h2 class="section-title">Skills</h2>
         </div>
         <div class="skills-grid">
@@ -1024,7 +991,6 @@
     <section id="experience">
       <div class="container">
         <div class="section-header">
-          <!-- <span class="section-number">// 03 _ EXPERIENCE</span> -->
           <h2 class="section-title">Experience</h2>
         </div>
         <div class="exp-list">
@@ -1205,7 +1171,6 @@
     <section id="contact">
       <div class="container">
         <div class="contact-center">
-          <!-- <span class="section-number">// 04 _ ESTABLISH_CONNECTION</span> -->
           <h2 class="contact-heading">Let's build something.</h2>
           <p class="contact-sub">
             Open to senior backend roles, distributed-systems challenges, and
