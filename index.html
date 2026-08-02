@@ -11,8 +11,6 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#3b82f6">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://min0625.com">
-    <link rel="alternate" href="https://min0625.com" hreflang="en">
-    <link rel="alternate" href="https://min0625.com" hreflang="x-default">
     <meta
       name="description"
       content="Min Huang 黃彥閔 — Backend Engineer specializing in distributed systems, microservices, and cloud-native infrastructure."
@@ -29,27 +27,27 @@
       content="Min Huang 黃彥閔 — Backend Engineer specializing in distributed systems, microservices, and cloud-native infrastructure."
     >
     <meta property="og:locale" content="en_US">
-    <meta property="og:image" content="https://min0625.com/og-image.png">
-    <meta property="og:image:alt" content="Min Huang — Backend Engineer portfolio preview">
-    <meta name="theme-color" content="#000000">
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Min Huang — Backend Engineer">
+    <meta property="og:image" content="https://min0625.com/og-image.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta
-      name="twitter:description"
-      content="Min Huang 黃彥閔 — Backend Engineer specializing in distributed systems, microservices, and cloud-native infrastructure."
+      property="og:image:alt"
+      content="A backlit laptop keyboard in deep blue"
     >
-    <meta name="twitter:image" content="https://min0625.com/og-image.png">
-    <meta name="twitter:image:alt" content="Min Huang — Backend Engineer portfolio preview">
+    <meta name="theme-color" content="#000000">
+    <!-- Twitter Card — title/description/image fall back to the og:* tags -->
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Hanken+Grotesk:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Hanken+Grotesk:wght@400&display=swap"
       rel="stylesheet"
     >
     <style>
     /* ── Design Tokens ─────────────────────────────────────── */
     :root {
+      color-scheme: dark;
       --bg-pure: #000000;
       --bg-elevated: #0a0a0a;
       --bg-surface: #121414;
@@ -61,11 +59,17 @@
       --accent-dim: #1d4ed8;
       --border: #1a1a1a;
       --border-bright: #2a2a2a;
-      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --font-sans: "Hanken Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono:
+        "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      --font-sans:
+        "Hanken Grotesk", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
       --max-w: 1200px;
       --margin-desktop: 64px;
       --margin-mobile: 16px;
+      /* Sticky nav height; drives #hero size and section scroll-margin. */
+      --nav-h: 60px;
     }
 
     /* ── Reset ─────────────────────────────────────────────── */
@@ -98,6 +102,11 @@
       text-decoration: none;
     }
 
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
     /* ── Utilities ─────────────────────────────────────────── */
     .container {
       max-width: var(--max-w);
@@ -114,7 +123,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      height: 60px;
+      height: var(--nav-h);
       background-color: var(--bg-pure);
       border-bottom: 1px solid var(--border);
       display: flex;
@@ -188,7 +197,7 @@
 
     /* ── Hero ──────────────────────────────────────────────── */
     #hero {
-      min-height: calc(100vh - 60px);
+      min-height: calc(100dvh - var(--nav-h));
       display: flex;
       align-items: center;
       justify-content: center;
@@ -203,7 +212,7 @@
       inset: 0;
       background: radial-gradient(
         circle at 50% 50%,
-        rgba(59, 130, 246, 0.05) 0%,
+        color-mix(in srgb, var(--accent) 5%, transparent) 0%,
         transparent 70%
       );
       pointer-events: none;
@@ -246,7 +255,7 @@
       margin-bottom: 36px;
       border-left: 2px solid var(--accent);
       padding: 8px 16px;
-      background-color: rgba(10, 10, 10, 0.5);
+      background-color: color-mix(in srgb, var(--bg-elevated) 50%, transparent);
       text-align: left;
     }
 
@@ -287,7 +296,8 @@
       font-weight: 700;
       letter-spacing: 0.05em;
       color: var(--accent);
-      border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--accent) 30%, transparent);
       padding: 8px 16px;
       transition: border-color 0.2s;
     }
@@ -300,7 +310,7 @@
     section {
       padding-block: 96px;
       border-bottom: 1px solid var(--border);
-      scroll-margin-top: 60px;
+      scroll-margin-top: var(--nav-h);
     }
 
     .section-header {
@@ -348,13 +358,13 @@
       content: "";
       position: absolute;
       inset: -4px;
-      background: rgba(59, 130, 246, 0.08);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
       filter: blur(12px);
       transition: background 0.5s;
     }
 
     .about-image-panel:hover::before {
-      background: rgba(59, 130, 246, 0.18);
+      background: color-mix(in srgb, var(--accent) 18%, transparent);
     }
 
     .about-img {
@@ -392,10 +402,6 @@
       letter-spacing: -0.02em;
       line-height: 1;
       margin-bottom: 8px;
-    }
-
-    .stat-value .accent {
-      color: var(--accent);
     }
 
     .stat-label {
@@ -447,7 +453,6 @@
       padding: 5px 10px;
       border: 1px solid var(--border-bright);
       color: var(--text-muted);
-      background-color: transparent;
       transition:
         border-color 0.2s,
         color 0.2s;
@@ -664,6 +669,11 @@
 
     /* ── Responsive ────────────────────────────────────────── */
     @media (max-width: 768px) {
+      :root {
+        /* Wrapped: 10px pad ×2 + 44 icons + 10 gap + 44 links + 1px border. */
+        --nav-h: 119px;
+      }
+
       .container {
         padding-inline: var(--margin-mobile);
       }
@@ -679,25 +689,25 @@
       }
 
       .nav-icon-links {
-        display: flex;
         order: 2;
       }
 
       .nav-links {
-        display: flex;
         order: 3;
         width: 100%;
         gap: 12px;
         flex-wrap: wrap;
       }
 
-      .nav-links a {
-        padding-block: 6px;
-      }
-
-      /* ponytail: rough wrapped-nav height; tune if nav layout changes */
-      section {
-        scroll-margin-top: 110px;
+      /* Touch targets: text links are too short to hit reliably. */
+      .nav-links a,
+      .contact-social-link,
+      .footer-socials a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
       }
 
       #about .about-grid {
@@ -810,408 +820,412 @@
       </div>
     </nav>
 
-    <!-- Hero -->
-    <section id="hero">
-      <div class="container">
-        <div class="hero-content">
-          <h1 class="hero-name">
-            HELLO, I'M<br><span class="accent">MIN HUANG</span>
-          </h1>
-          <p class="hero-title">Backend Engineer</p>
-          <p class="hero-bio">
-            Backend engineer from Taiwan with 6+ years in Go, building scalable
-            microservices and distributed systems. I engineer for performance
-            with minimalist logic.
-          </p>
-          <div class="hero-social-links">
-            <a
-              class="hero-icon-link"
-              href="https://github.com/min0625"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="GitHub"
-              aria-label="GitHub"
-              >&gt;_</a
-            >
-            <a
-              class="hero-icon-link"
-              href="https://www.linkedin.com/in/min0625"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="LinkedIn"
-              aria-label="LinkedIn"
-              >IN</a
-            >
-            <a
-              class="hero-icon-link"
-              href="https://min0625.medium.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Medium"
-              aria-label="Medium"
-              >MD</a
-            >
-            <a
-              class="hero-icon-link"
-              href="https://www.cake.me/resumes/min0625"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Resume"
-              aria-label="Resume"
-              >CV</a
-            >
+    <main>
+      <!-- Hero -->
+      <section id="hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="hero-name">
+              HELLO, I'M<br><span class="accent">MIN HUANG</span>
+            </h1>
+            <p class="hero-title">Backend Engineer</p>
+            <p class="hero-bio">
+              Backend engineer from Taiwan with 6+ years in Go, building
+              scalable microservices and distributed systems. I engineer for
+              performance with minimalist logic.
+            </p>
+            <div class="hero-social-links">
+              <a
+                class="hero-icon-link"
+                href="https://github.com/min0625"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GitHub"
+                aria-label="GitHub"
+                >&gt;_</a
+              >
+              <a
+                class="hero-icon-link"
+                href="https://www.linkedin.com/in/min0625"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn"
+                aria-label="LinkedIn"
+                >IN</a
+              >
+              <a
+                class="hero-icon-link"
+                href="https://min0625.medium.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Medium"
+                aria-label="Medium"
+                >MD</a
+              >
+              <a
+                class="hero-icon-link"
+                href="https://www.cake.me/resumes/min0625"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Resume"
+                aria-label="Resume"
+                >CV</a
+              >
+            </div>
+            <a class="hero-cta-link" href="#experience">VIEW_EXPERIENCE →</a>
           </div>
-          <a class="hero-cta-link" href="#experience">VIEW_EXPERIENCE →</a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- About -->
-    <section id="about">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">About</h2>
-        </div>
-        <div class="about-grid">
-          <div class="about-left">
-            <div class="about-body">
-              <p>
-                Backend engineer from Taiwan with 6+ years in Go, building
-                scalable microservices and distributed systems. Skilled at
-                designing REST and gRPC APIs, event-driven architectures, and
-                cloud-native infrastructure.
-              </p>
-              <p>
-                Strong with MySQL, Redis, MongoDB, Kafka, and AWS/GCP, with
-                hands-on experience integrating payment systems. I approach
-                software with minimalist logic — code should be efficient and readable.
-              </p>
-            </div>
-            <div class="about-stats">
-              <div class="stat-item">
-                <div class="stat-value">6<span class="accent">+</span></div>
-                <div class="stat-label">Years of Go</div>
+      <!-- About -->
+      <section id="about">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">About</h2>
+          </div>
+          <div class="about-grid">
+            <div class="about-left">
+              <div class="about-body">
+                <p>
+                  Backend engineer from Taiwan with 6+ years in Go, building
+                  scalable microservices and distributed systems. Skilled at
+                  designing REST and gRPC APIs, event-driven architectures, and
+                  cloud-native infrastructure.
+                </p>
+                <p>
+                  Strong with MySQL, Redis, MongoDB, Kafka, and AWS/GCP, with
+                  hands-on experience integrating payment systems. I approach
+                  software with minimalist logic — code should be efficient and
+                  readable.
+                </p>
               </div>
-              <div class="stat-item">
-                <div class="stat-value">60<span class="accent">K</span></div>
-                <div class="stat-label">Monthly Renewals Handled</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-value">2</div>
-                <div class="stat-label">Cloud Platforms</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-value">4<span class="accent">+</span></div>
-                <div class="stat-label">Companies Served</div>
+              <div class="about-stats">
+                <div class="stat-item">
+                  <div class="stat-value">6<span class="accent">+</span></div>
+                  <div class="stat-label">Years of Go</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">60<span class="accent">K+</span></div>
+                  <div class="stat-label">Monthly Renewals Handled</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="about-image-panel">
-            <img
-              src="/og-image.png"
-              alt=""
-              loading="lazy"
-              decoding="async"
-              class="about-img"
-            >
+            <!-- Photo: Andras Vas / Unsplash (Unsplash License), recoloured to palette -->
+            <div class="about-image-panel">
+              <img
+                src="/og-image.jpg"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                class="about-img"
+              >
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Skills / Tech Stack -->
-    <section id="skills">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Skills</h2>
-        </div>
-        <div class="skills-grid">
-          <div class="skill-group">
-            <div class="skill-group-title">Backend</div>
-            <div class="tag-list">
-              <span class="tag">Golang</span>
-              <span class="tag">RESTful API</span>
-              <span class="tag">gRPC</span>
-              <span class="tag">Temporal</span>
-              <span class="tag">Kafka</span>
-            </div>
+      <!-- Skills / Tech Stack -->
+      <section id="skills">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Skills</h2>
           </div>
-          <div class="skill-group">
-            <div class="skill-group-title">Database / Cache</div>
-            <div class="tag-list">
-              <span class="tag">MySQL (Aurora)</span>
-              <span class="tag">Redis</span>
-              <span class="tag">MongoDB</span>
-              <span class="tag">DynamoDB</span>
-              <span class="tag">Spanner</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <div class="skill-group-title">Cloud & Infra</div>
-            <div class="tag-list">
-              <span class="tag">AWS</span>
-              <span class="tag">GCP</span>
-              <span class="tag">Docker</span>
-              <span class="tag">Kubernetes</span>
-              <span class="tag">Terraform</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <div class="skill-group-title">AWS Services</div>
-            <div class="tag-list">
-              <span class="tag">EventBridge</span>
-              <span class="tag">SQS</span>
-              <span class="tag">Lambda</span>
-              <span class="tag">S3</span>
-              <span class="tag">ElastiCache</span>
-              <span class="tag">DocumentDB</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <div class="skill-group-title">GCP Services</div>
-            <div class="tag-list">
-              <span class="tag">PubSub</span>
-              <span class="tag">Spanner</span>
-              <span class="tag">SecretManager</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <div class="skill-group-title">CI / CD</div>
-            <div class="tag-list">
-              <span class="tag">GitHub Actions</span>
-              <span class="tag">GitLab CI</span>
-              <span class="tag">Datadog</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Experience -->
-    <section id="experience">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Experience</h2>
-        </div>
-        <div class="exp-list">
-          <!-- FliQt -->
-          <div class="exp-item">
-            <div class="exp-meta">
-              <div class="exp-period">Sep 2025 — Dec 2025</div>
-              <div class="exp-company">FliQt</div>
-              <div class="exp-type">Full-Time · Remote · Taipei,&nbsp;Taiwan</div>
-            </div>
-            <div>
-              <div class="exp-role">Senior Backend Engineer</div>
-              <p class="exp-desc">
-                Designed and implemented core microservices on GCP for Web3
-                teams, delivering reliable, scalable backend systems.
-              </p>
-              <ul class="exp-bullets">
-                <li>
-                  Designed and implemented a Web3 bridge service for cross-chain
-                  transactions.
-                </li>
-                <li>
-                  Integrated logging and tracing with Datadog to improve
-                  observability and debugging.
-                </li>
-                <li>
-                  Introduced trunk-based development to reduce merge conflicts
-                  and streamline releases.
-                </li>
-                <li>
-                  Implemented GitHub Actions CI/CD pipelines to automate code
-                  formatting, linting, and testing.
-                </li>
-              </ul>
+          <div class="skills-grid">
+            <div class="skill-group">
+              <div class="skill-group-title">Backend</div>
               <div class="tag-list">
                 <span class="tag">Golang</span>
-                <span class="tag">GCP</span>
-                <span class="tag">PubSub</span>
+                <span class="tag">RESTful API</span>
+                <span class="tag">gRPC</span>
+                <span class="tag">Temporal</span>
+                <span class="tag">Kafka</span>
+                <span class="tag">Web3</span>
+                <span class="tag">Cross-chain Bridge</span>
+              </div>
+            </div>
+            <div class="skill-group">
+              <div class="skill-group-title">Database / Cache</div>
+              <div class="tag-list">
+                <span class="tag">MySQL (Aurora)</span>
+                <span class="tag">Redis</span>
+                <span class="tag">MongoDB</span>
+                <span class="tag">DynamoDB</span>
                 <span class="tag">Spanner</span>
+              </div>
+            </div>
+            <div class="skill-group">
+              <div class="skill-group-title">Cloud & Infra</div>
+              <div class="tag-list">
+                <span class="tag">AWS</span>
+                <span class="tag">GCP</span>
+                <span class="tag">Docker</span>
                 <span class="tag">Kubernetes</span>
                 <span class="tag">Terraform</span>
+              </div>
+            </div>
+            <div class="skill-group">
+              <div class="skill-group-title">AWS Services</div>
+              <div class="tag-list">
+                <span class="tag">EventBridge</span>
+                <span class="tag">SQS</span>
+                <span class="tag">Lambda</span>
+                <span class="tag">S3</span>
+                <span class="tag">ElastiCache</span>
+                <span class="tag">DocumentDB</span>
+              </div>
+            </div>
+            <div class="skill-group">
+              <div class="skill-group-title">GCP Services</div>
+              <div class="tag-list">
+                <span class="tag">Pub/Sub</span>
+                <span class="tag">Secret Manager</span>
+              </div>
+            </div>
+            <div class="skill-group">
+              <div class="skill-group-title">CI/CD &amp; Observability</div>
+              <div class="tag-list">
                 <span class="tag">GitHub Actions</span>
+                <span class="tag">GitLab CI</span>
                 <span class="tag">Datadog</span>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <!-- KKCompany -->
-          <div class="exp-item">
-            <div class="exp-meta">
-              <div class="exp-period">Nov 2020 — Aug 2025</div>
-              <div class="exp-company">KKCompany</div>
-              <div class="exp-type">Full-Time · Hybrid · Taipei,&nbsp;Taiwan</div>
-            </div>
-            <div>
-              <div class="exp-role">Senior Backend Engineer</div>
-              <p class="exp-desc">
-                Designed and developed core microservices for Platform and
-                BlendVision on cloud infrastructure, delivering highly
-                available, scalable, and reliable systems.
-              </p>
-              <ul class="exp-bullets">
-                <li>
-                  Implemented Payment (GMO) service handling 60K+ monthly
-                  subscription renewals.
-                </li>
-                <li>
-                  Adopted event-driven architecture for improved service
-                  decoupling and scalability.
-                </li>
-                <li>
-                  Built reliable workflows using Temporal to enhance system
-                  stability.
-                </li>
-                <li>
-                  Created slow query dashboard for database performance
-                  monitoring and optimization.
-                </li>
-                <li>
-                  Integrated automated formatting, linting, and testing into
-                  GitLab CI pipelines.
-                </li>
-                <li>
-                  Introduced code generation tools to reduce repetitive
-                  development tasks.
-                </li>
-              </ul>
-              <div class="tag-list">
-                <span class="tag">Golang</span>
-                <span class="tag">gRPC</span>
-                <span class="tag">Temporal</span>
-                <span class="tag">MySQL Aurora</span>
-                <span class="tag">Redis</span>
-                <span class="tag">DynamoDB</span>
-                <span class="tag">MongoDB</span>
-                <span class="tag">AWS</span>
-                <span class="tag">Kubernetes</span>
-                <span class="tag">GitLab CI</span>
+      <!-- Experience -->
+      <section id="experience">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Experience</h2>
+          </div>
+          <div class="exp-list">
+            <!-- FliQt -->
+            <div class="exp-item">
+              <div class="exp-meta">
+                <div class="exp-period">Sep 2025 — Dec 2025</div>
+                <div class="exp-company">FliQt</div>
+                <div class="exp-type">
+                  Full-Time · Remote · Taipei,&nbsp;Taiwan
+                </div>
+              </div>
+              <div>
+                <div class="exp-role">Senior Backend Engineer</div>
+                <p class="exp-desc">
+                  Built core microservices on GCP for Web3 teams, delivering
+                  reliable, scalable backend systems.
+                </p>
+                <ul class="exp-bullets">
+                  <li>
+                    Designed and implemented a Web3 bridge service for
+                    cross-chain transactions.
+                  </li>
+                  <li>
+                    Integrated logging and tracing with Datadog to improve
+                    observability and debugging.
+                  </li>
+                  <li>
+                    Introduced trunk-based development to reduce merge conflicts
+                    and streamline releases.
+                  </li>
+                  <li>
+                    Implemented GitHub Actions CI/CD pipelines to automate code
+                    formatting, linting, and testing.
+                  </li>
+                </ul>
+                <div class="tag-list">
+                  <span class="tag">Golang</span>
+                  <span class="tag">GCP</span>
+                  <span class="tag">Web3</span>
+                  <span class="tag">Pub/Sub</span>
+                  <span class="tag">Spanner</span>
+                  <span class="tag">Kubernetes</span>
+                  <span class="tag">Terraform</span>
+                  <span class="tag">GitHub Actions</span>
+                  <span class="tag">Datadog</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Paradise Soft -->
-          <div class="exp-item">
-            <div class="exp-meta">
-              <div class="exp-period">Mar 2019 — May 2020</div>
-              <div class="exp-company">Paradise Soft</div>
-              <div class="exp-type">Full-Time · Taipei,&nbsp;Taiwan</div>
-            </div>
-            <div>
-              <div class="exp-role">Backend Engineer</div>
-              <p class="exp-desc">
-                Developed and maintained Data Warehouse services, including data
-                collection via web crawlers and third-party APIs, transformation
-                pipelines, and RESTful delivery.
-              </p>
-              <ul class="exp-bullets">
-                <li>
-                  Created internal libraries: API cache middleware and
-                  MySQL/MongoDB repositories.
-                </li>
-                <li>
-                  Refactored data collection flow with Kafka to distribute tasks
-                  and reduce node load.
-                </li>
-                <li>
-                  Introduced proxy support to crawlers to reduce blocking risks.
-                </li>
-                <li>
-                  Optimized Info Site APIs using preprocessing and caching for
-                  low-latency responses.
-                </li>
-                <li>Built backend CRUD APIs for the DWH service.</li>
-              </ul>
-              <div class="tag-list">
-                <span class="tag">Golang</span>
-                <span class="tag">Kafka</span>
-                <span class="tag">MySQL</span>
-                <span class="tag">MongoDB</span>
-                <span class="tag">RESTful API</span>
+            <!-- KKCompany -->
+            <div class="exp-item">
+              <div class="exp-meta">
+                <div class="exp-period">Nov 2020 — Aug 2025</div>
+                <div class="exp-company">KKCompany</div>
+                <div class="exp-type">
+                  Full-Time · Hybrid · Taipei,&nbsp;Taiwan
+                </div>
+              </div>
+              <div>
+                <div class="exp-role">Senior Backend Engineer</div>
+                <p class="exp-desc">
+                  Designed and developed core microservices for Platform and
+                  BlendVision on cloud infrastructure, delivering highly
+                  available, scalable, and reliable systems.
+                </p>
+                <ul class="exp-bullets">
+                  <li>
+                    Implemented the Payment (GMO) service handling 60K+ monthly
+                    subscription renewals.
+                  </li>
+                  <li>
+                    Adopted event-driven architecture for improved service
+                    decoupling and scalability.
+                  </li>
+                  <li>
+                    Built reliable workflows using Temporal to enhance system
+                    stability.
+                  </li>
+                  <li>
+                    Created a slow query dashboard for database performance
+                    monitoring and optimization.
+                  </li>
+                  <li>
+                    Integrated automated formatting, linting, and testing into
+                    GitLab CI pipelines.
+                  </li>
+                  <li>
+                    Introduced code generation tools to reduce repetitive
+                    development tasks.
+                  </li>
+                </ul>
+                <div class="tag-list">
+                  <span class="tag">Golang</span>
+                  <span class="tag">gRPC</span>
+                  <span class="tag">Temporal</span>
+                  <span class="tag">MySQL (Aurora)</span>
+                  <span class="tag">Redis</span>
+                  <span class="tag">DynamoDB</span>
+                  <span class="tag">MongoDB</span>
+                  <span class="tag">AWS</span>
+                  <span class="tag">Lambda</span>
+                  <span class="tag">S3</span>
+                  <span class="tag">Kubernetes</span>
+                  <span class="tag">GitLab CI</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Intern -->
-          <div class="exp-item">
-            <div class="exp-meta">
-              <div class="exp-period">Jul 2018 — Feb 2019</div>
-              <div class="exp-company">Paradise Soft</div>
-              <div class="exp-type">Internship · Taipei,&nbsp;Taiwan</div>
+            <!-- Paradise Soft -->
+            <div class="exp-item">
+              <div class="exp-meta">
+                <div class="exp-period">Mar 2019 — May 2020</div>
+                <div class="exp-company">Paradise Soft</div>
+                <div class="exp-type">Full-Time · Taipei,&nbsp;Taiwan</div>
+              </div>
+              <div>
+                <div class="exp-role">Backend Engineer</div>
+                <p class="exp-desc">
+                  Developed and maintained Data Warehouse services, including
+                  data collection via web crawlers and third-party APIs,
+                  transformation pipelines, and RESTful delivery.
+                </p>
+                <ul class="exp-bullets">
+                  <li>
+                    Created internal libraries: API cache middleware and
+                    MySQL/MongoDB repositories.
+                  </li>
+                  <li>
+                    Refactored data collection flow with Kafka to distribute
+                    tasks and reduce node load.
+                  </li>
+                  <li>
+                    Introduced proxy support to crawlers to reduce blocking
+                    risks.
+                  </li>
+                  <li>
+                    Optimized Info Site APIs using preprocessing and caching for
+                    low-latency responses.
+                  </li>
+                </ul>
+                <div class="tag-list">
+                  <span class="tag">Golang</span>
+                  <span class="tag">Kafka</span>
+                  <span class="tag">MySQL</span>
+                  <span class="tag">MongoDB</span>
+                  <span class="tag">RESTful API</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <div class="exp-role">Backend Engineer Intern</div>
-              <p class="exp-desc">
-                Assisted in developing Data Warehouse services, including data
-                collection, transformation, and RESTful API delivery.
-              </p>
-              <ul class="exp-bullets">
-                <li>
-                  Refactored the crawler project to reduce duplicated code and
-                  improve maintainability.
-                </li>
-                <li>Ingested web and API data into the DWH.</li>
-                <li>Built backend CRUD APIs for the DWH service.</li>
-              </ul>
-              <div class="tag-list">
-                <span class="tag">Golang</span>
-                <span class="tag">MySQL</span>
-                <span class="tag">MongoDB</span>
+
+            <!-- Intern -->
+            <div class="exp-item">
+              <div class="exp-meta">
+                <div class="exp-period">Jul 2018 — Feb 2019</div>
+                <div class="exp-company">Paradise Soft</div>
+                <div class="exp-type">Internship · Taipei,&nbsp;Taiwan</div>
+              </div>
+              <div>
+                <div class="exp-role">Backend Engineer Intern</div>
+                <p class="exp-desc">
+                  Assisted in developing Data Warehouse services, including data
+                  collection, transformation, and RESTful API delivery.
+                </p>
+                <ul class="exp-bullets">
+                  <li>
+                    Refactored the crawler project to reduce duplicated code and
+                    improve maintainability.
+                  </li>
+                  <li>Ingested web and API data into the DWH.</li>
+                  <li>Built backend CRUD APIs for the DWH service.</li>
+                </ul>
+                <div class="tag-list">
+                  <span class="tag">Golang</span>
+                  <span class="tag">MySQL</span>
+                  <span class="tag">MongoDB</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Contact -->
-    <section id="contact">
-      <div class="container">
-        <div class="contact-center">
-          <h2 class="contact-heading">Let's build something.</h2>
-          <p class="contact-sub">
-            Open to senior backend roles, distributed-systems challenges, and
-            meaningful technical conversations.
-          </p>
-          <a class="contact-email-link" href="mailto:min.huang0625@gmail.com">
-            MIN.HUANG0625@GMAIL.COM
-          </a>
-          <div class="contact-social-row">
-            <a
-              class="contact-social-link"
-              href="https://github.com/min0625"
-              target="_blank"
-              rel="noopener noreferrer"
-              >GitHub</a
-            >
-            <a
-              class="contact-social-link"
-              href="https://www.linkedin.com/in/min0625"
-              target="_blank"
-              rel="noopener noreferrer"
-              >LinkedIn</a
-            >
-            <a
-              class="contact-social-link"
-              href="https://min0625.medium.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Medium</a
-            >
-            <a
-              class="contact-social-link"
-              href="https://www.cake.me/resumes/min0625"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Resume</a
-            >
+      <!-- Contact -->
+      <section id="contact">
+        <div class="container">
+          <div class="contact-center">
+            <h2 class="contact-heading">Let's build something.</h2>
+            <p class="contact-sub">
+              Open to senior backend roles, distributed-systems challenges, and
+              meaningful technical conversations.
+            </p>
+            <a class="contact-email-link" href="mailto:min.huang0625@gmail.com">
+              MIN.HUANG0625@GMAIL.COM
+            </a>
+            <div class="contact-social-row">
+              <a
+                class="contact-social-link"
+                href="https://github.com/min0625"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GitHub</a
+              >
+              <a
+                class="contact-social-link"
+                href="https://www.linkedin.com/in/min0625"
+                target="_blank"
+                rel="noopener noreferrer"
+                >LinkedIn</a
+              >
+              <a
+                class="contact-social-link"
+                href="https://min0625.medium.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Medium</a
+              >
+              <a
+                class="contact-social-link"
+                href="https://www.cake.me/resumes/min0625"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Resume</a
+              >
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
     <!-- Footer -->
     <footer>
