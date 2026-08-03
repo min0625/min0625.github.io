@@ -1,15 +1,15 @@
 {
-  "scripts": {
-    "fix": "biome check --write .",
-    "check": "biome check .",
-    "clean": "rm -rf dist",
-    "build:assets": "mkdir -p dist && cp index.html dist/ && cp -r public/* dist/ && bun ./scripts/inject-build-info.js dist/index.html",
-    "build": "bun run clean && bun run build:assets",
-    "preview": "bun run build && bun run serve dist -l 3000"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@biomejs/biome": "^2.4.15",
-    "serve": "^14.2.6"
-  }
+	"scripts": {
+		"fix": "biome check --write .",
+		"check": "biome check .",
+		"clean": "rm -rf dist",
+		"build:assets": "mkdir -p dist && cp index.html dist/ && cp -r public/* dist/ && bun ./scripts/inject-build-info.js dist/index.html",
+		"build": "bun run clean && bun run build:assets",
+		"preview": "bun run build && bun run serve dist -l 3000"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.6",
+		"serve": "^14.2.6"
+	}
 }
