@@ -76,15 +76,13 @@ tag must stay in `<head>`.
 
 ## Conventions
 
-Biome formats `index.html` (`html.formatter.enabled` in `biome.json`) and its
-HTML parser rejects structural errors such as an unclosed tag, so `bun run
-check` guards both. Still write markup in the house style — 2-space indent,
-80-char lines, one attribute per line on long elements — so `fix` stays a
+`biome.json` mirrors https://github.com/min0625/lexoria — everything is Biome
+defaults except `html.formatter.enabled`, so the house style is whatever
+`bun run fix` produces: **tab** indent, 80-char lines, double quotes. Write
+markup that way (one attribute per line on long elements) so `fix` stays a
 no-op instead of reflowing your diff. Inline `<style>` contents are formatted
 too; `indentScriptAndStyle` is left off, matching the existing indentation.
 
-Biome ships **no** HTML lint rules, so nothing automated checks semantics or
-accessibility. The current baseline is 0 axe-core violations against
-WCAG 2.0/2.1/2.2 A+AA — re-audit externally after any markup change.
-
-Biome's single-quote / semicolon rules apply to `scripts/*.js` only.
+Biome's HTML lint coverage is thin — a few a11y rules only, nothing that
+checks semantics broadly. The current baseline is 0 axe-core violations
+against WCAG 2.0/2.1/2.2 A+AA — re-audit externally after any markup change.
