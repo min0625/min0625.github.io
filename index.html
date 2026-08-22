@@ -13,7 +13,7 @@
 		<link rel="canonical" href="https://min0625.com">
 		<meta
 			name="description"
-			content="Min Huang 黃彥閔 — Backend Engineer specializing in distributed systems, microservices, and cloud-native infrastructure."
+			content="Min Huang 黃彥閔 — Backend Engineer specializing in distributed systems, microservices, and cloud-native infrastructure. Building open-source Go tools."
 		>
 		<meta name="author" content="Min Huang">
 		<meta name="robots" content="index, follow">
@@ -24,7 +24,7 @@
 		<meta property="og:title" content="Min Huang — Backend Engineer">
 		<meta
 			property="og:description"
-			content="Min Huang 黃彥閔 — Backend Engineer specializing in distributed systems, microservices, and cloud-native infrastructure."
+			content="Min Huang 黃彥閔 — Backend Engineer specializing in distributed systems, microservices, and cloud-native infrastructure. Building open-source Go tools."
 		>
 		<meta property="og:locale" content="en_US">
 		<meta property="og:image" content="https://min0625.com/og-image.jpg">
@@ -556,6 +556,39 @@
 			top: 2px;
 		}
 
+		.exp-bullets strong {
+			font-weight: 600;
+			color: var(--text-primary);
+		}
+
+		.exp-links {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 10px;
+			margin-top: 16px;
+		}
+
+		.exp-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			font-family: var(--font-mono);
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--accent);
+			text-decoration: underline;
+			text-decoration-color: transparent;
+			text-underline-offset: 4px;
+			transition: text-decoration-color 0.2s;
+		}
+
+		.exp-link:hover {
+			text-decoration-color: currentColor;
+		}
+
 		/* ── Contact ───────────────────────────────────────────── */
 		#contact {
 			border-bottom: none;
@@ -702,7 +735,8 @@
 			/* Touch targets: text links are too short to hit reliably. */
 			.nav-links a,
 			.contact-social-link,
-			.footer-socials a {
+			.footer-socials a,
+			.exp-link {
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -727,6 +761,13 @@
 				grid-template-columns: 1fr;
 				gap: 20px;
 				padding: 28px;
+			}
+
+			.exp-links {
+				flex-direction: row;
+				flex-wrap: wrap;
+				gap: 4px 20px;
+				margin-top: 4px;
 			}
 
 			.footer-inner {
@@ -872,7 +913,9 @@
 								>CV</a
 							>
 						</div>
-						<a class="hero-cta-link" href="#experience">VIEW_EXPERIENCE →</a>
+						<a class="hero-cta-link" href="#experience"
+							>VIEW_EXPERIENCE <span aria-hidden="true">→</span></a
+						>
 					</div>
 				</div>
 			</section>
@@ -937,8 +980,10 @@
 								<span class="tag">Golang</span>
 								<span class="tag">RESTful API</span>
 								<span class="tag">gRPC</span>
+								<span class="tag">OpenAPI</span>
 								<span class="tag">Temporal</span>
 								<span class="tag">Kafka</span>
+								<span class="tag">LLM APIs</span>
 								<span class="tag">Web3</span>
 								<span class="tag">Cross-chain Bridge</span>
 							</div>
@@ -947,8 +992,9 @@
 							<div class="skill-group-title">Database / Cache</div>
 							<div class="tag-list">
 								<span class="tag">MySQL (Aurora)</span>
-								<span class="tag">Redis</span>
-								<span class="tag">MongoDB</span>
+								<span class="tag">PostgreSQL</span>
+								<span class="tag">Redis (ElastiCache)</span>
+								<span class="tag">MongoDB (DocumentDB)</span>
 								<span class="tag">DynamoDB</span>
 								<span class="tag">Spanner</span>
 							</div>
@@ -968,10 +1014,11 @@
 							<div class="tag-list">
 								<span class="tag">EventBridge</span>
 								<span class="tag">SQS</span>
+								<span class="tag">SNS</span>
 								<span class="tag">Lambda</span>
 								<span class="tag">S3</span>
-								<span class="tag">ElastiCache</span>
-								<span class="tag">DocumentDB</span>
+								<span class="tag">SES</span>
+								<span class="tag">AWS Translate</span>
 							</div>
 						</div>
 						<div class="skill-group">
@@ -982,11 +1029,17 @@
 							</div>
 						</div>
 						<div class="skill-group">
-							<div class="skill-group-title">CI/CD &amp; Observability</div>
+							<div class="skill-group-title">CI/CD &amp; Tooling</div>
 							<div class="tag-list">
 								<span class="tag">GitHub Actions</span>
 								<span class="tag">GitLab CI</span>
+								<span class="tag">GoReleaser</span>
 								<span class="tag">Datadog</span>
+								<span class="tag">CloudWatch</span>
+								<span class="tag">OpenTelemetry</span>
+								<span class="tag">CodeQL</span>
+								<span class="tag">Claude Code</span>
+								<span class="tag">GitHub Copilot</span>
 							</div>
 						</div>
 					</div>
@@ -1000,6 +1053,90 @@
 						<h2 class="section-title">Experience</h2>
 					</div>
 					<div class="exp-list">
+						<!-- Independent -->
+						<div class="exp-item">
+							<div class="exp-meta">
+								<div class="exp-period">Apr 2026 — Present</div>
+								<div class="exp-company">Independent</div>
+								<div class="exp-type">Open Source · Taiwan</div>
+								<div class="exp-links">
+									<a
+										class="exp-link"
+										href="https://github.com/min0625/minurl"
+										target="_blank"
+										rel="noopener noreferrer"
+										aria-label="minurl on GitHub"
+										>minurl <span aria-hidden="true">→</span></a
+									>
+									<a
+										class="exp-link"
+										href="https://github.com/min0625/graft"
+										target="_blank"
+										rel="noopener noreferrer"
+										aria-label="graft on GitHub"
+										>graft <span aria-hidden="true">→</span></a
+									>
+									<a
+										class="exp-link"
+										href="https://github.com/min0625/mint"
+										target="_blank"
+										rel="noopener noreferrer"
+										aria-label="mint on GitHub"
+										>mint <span aria-hidden="true">→</span></a
+									>
+								</div>
+							</div>
+							<div>
+								<div class="exp-role">Backend Engineer</div>
+								<p class="exp-desc">
+									Design and build open-source backend services and developer
+									tools in Go, solo from problem definition to release.
+								</p>
+								<ul class="exp-bullets">
+									<li>
+										Designed <strong>minurl</strong>, an OpenAPI-first URL
+										shortener, from its Feistel-permuted Base58 ID scheme to
+										distroless images with liveness and readiness probes.
+									</li>
+									<li>
+										Built <strong>graft</strong>, a git dependency manager,
+										verifying every install against a content hash and
+										deduplicating trees in a shared content-addressed store.
+									</li>
+									<li>
+										Shipped <strong>mint</strong>, a provider-agnostic LLM
+										translation CLI, isolating untrusted input from model
+										instructions to block prompt injection.
+									</li>
+									<li>
+										Published Go libraries — gsyncmap, tz, and errgroup —
+										filling gaps in the standard library.
+									</li>
+									<li>
+										Distributed the same Go binary to Homebrew, PyPI, and npm
+										from one GoReleaser pipeline.
+									</li>
+									<li>
+										Gated every PR with GitHub Actions CI and CodeQL, with
+										Claude Code and Copilot in the loop.
+									</li>
+								</ul>
+								<div class="tag-list">
+									<span class="tag">Golang</span>
+									<span class="tag">RESTful API</span>
+									<span class="tag">OpenAPI</span>
+									<span class="tag">PostgreSQL</span>
+									<span class="tag">LLM APIs</span>
+									<span class="tag">OpenTelemetry</span>
+									<span class="tag">Docker</span>
+									<span class="tag">GoReleaser</span>
+									<span class="tag">GitHub Actions</span>
+									<span class="tag">Claude Code</span>
+									<span class="tag">GitHub Copilot</span>
+								</div>
+							</div>
+						</div>
+
 						<!-- FliQt -->
 						<div class="exp-item">
 							<div class="exp-meta">
